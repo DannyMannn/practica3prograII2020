@@ -3,7 +3,7 @@ import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Sistema {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		Scanner scanner = new Scanner(System.in);
 		while(true){
@@ -14,8 +14,8 @@ public class Sistema {
 				break;
 
 			System.out.print("Tipo de vuelo (Internacional/Nacinoal): ");
-			String vuelo = scanner.nextLine().toUpperCase();
-			EnumVuelo tipoDeVuelo = EnumVuelo.valueOf(vuelo);
+			//String vuelo = scanner.nextLine().toUpperCase();
+			EnumVuelo tipoDeVuelo = EnumVuelo.valueOf(scanner.nextLine().toUpperCase());
 
 			System.out.print("Nombre: ");
 			String nombre = scanner.nextLine();
@@ -28,8 +28,8 @@ public class Sistema {
 			String genero = scanner.nextLine();
 
 			System.out.print("Clase de vuelo (Primera_Clase/Ejecutivo/Turista): ");
-			String claseVuelo = scanner.nextLine().toUpperCase();
-			EnumClase claseDeVuelo = EnumClase.valueOf(claseVuelo);
+			//String claseVuelo = scanner.nextLine().toUpperCase();
+			EnumClase claseDeVuelo = EnumClase.valueOf(scanner.nextLine().toUpperCase());
 
 			System.out.print("Numero de asiento: ");
 			int numAsiento = scanner.nextInt();
@@ -49,7 +49,9 @@ public class Sistema {
 									genero,tipoDeVuelo,claseDeVuelo,
 									numAsiento,numVuelo,aerolinea,destino);
 			Pasajero pasajero = getPasajero(boleto);
+
 			//System.out.println(boleto.mostrar());
+			getMaleta(pasajero);
 			System.out.println(pasajero.getBoleto().mostrar());
 
 		}
@@ -135,4 +137,35 @@ public class Sistema {
 		return pasajero;
 	}
 
+	public static void getMaleta(Pasajero pasajero) throws Exception {
+		Scanner scanner = new Scanner(System.in);
+		double precioTotalMaletas = 0;
+		switch(pasajero.getBoleto().clasePasajero){
+			case TURISTA:
+				System.out.println("Registrar el peso de la maleta: ");
+				((PasajeroTurista)pasajero).documentarMaleta(new Maleta(scanner.nextDouble()));
+				precioTotalMaletas += ((PasajeroTurista)pasajero).getMaleta().obtenerTotal();
+				System.out.println("Precio total de maletas: "+precioTotalMaletas);
+				break;
+			case EJECUTIVO:
+				int i = 0;
+				while(i < ((PasajeroEjecutivo)pasajero).getMaletas().length) {
+					System.out.print("Registrar el peso de la maleta " + (i + 1) + ": ");
+					((PasajeroEjecutivo) pasajero).documentarMaleta(new Maleta(scanner.nextDouble()));
+					precioTotalMaletas += ((PasajeroEjecutivo) pasajero).getMaletas()[i].obtenerTotal();
+					i++;
+				}
+				System.out.println("Precio total de maletas: "+precioTotalMaletas);
+				break;
+			case PRIMERA_CLASE:
+				i = 0;
+				while(i < ((PasajeroPrimeraClase)pasajero).getMaletas().length){
+					System.out.print("Registrar el peso de la maleta "+ (i+1)+": ");
+						((PasajeroPrimeraClase) pasajero).documentarMaleta(new Maleta(scanner.nextDouble()));
+						precioTotalMaletas += ((PasajeroPrimeraClase)pasajero).getMaletas()[i].obtenerTotal();
+						i++;
+				}
+				System.out.println("Precio total de maletas: "+precioTotalMaletas);
+		}
+	}
 }

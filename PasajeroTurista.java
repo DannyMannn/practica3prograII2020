@@ -19,8 +19,8 @@ public class PasajeroTurista extends Pasajero {
 	 * maletas asociadas.
 	 */
 	@Override
-	public void documentarMaleta(Maleta maleta) throws Exception {
-		if (maleta != null) throw new Exception("Número de maletas excedido.");
+	public void documentarMaleta(Maleta maleta)  {//throws exception
+		//if (maleta != null) throw new Exception("Número de maletas excedido.");
 		this.maleta = maleta;
 	}
 
