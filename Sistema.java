@@ -13,8 +13,8 @@ public class Sistema {
 			if(opc.toLowerCase().equals("n"))
 				break;
 
-			System.out.print("Tipo de vuelo: ");
-			String vuelo = scanner.nextLine();
+			System.out.print("Tipo de vuelo (Internacional/Nacinoal): ");
+			String vuelo = scanner.nextLine().toUpperCase();
 			EnumVuelo tipoDeVuelo = EnumVuelo.valueOf(vuelo);
 
 			System.out.print("Nombre: ");
@@ -27,12 +27,16 @@ public class Sistema {
 			System.out.print("Genero: ");
 			String genero = scanner.nextLine();
 
-			System.out.print("Clase de vuelo: ");
+			System.out.print("Clase de vuelo (Primera_Clase/Ejecutivo/Turista): ");
 			String claseVuelo = scanner.nextLine().toUpperCase();
 			EnumClase claseDeVuelo = EnumClase.valueOf(claseVuelo);
-			
+
 			System.out.print("Numero de asiento: ");
 			int numAsiento = scanner.nextInt();
+			scanner.nextLine();
+
+			System.out.print("Numero de vuelo: ");
+			int numVuelo = scanner.nextInt();
 			scanner.nextLine();
 
 			System.out.print("Aerolinea: ");
@@ -41,14 +45,15 @@ public class Sistema {
 			System.out.print("Destino: ");
 			String destino = scanner.nextLine();
 
-			Boleto boleto = getBoleto("dan",20,
-					"m",EnumVuelo.INTERNACIONAL,EnumClase.TURISTA,
-					21,322,"jets","hell");
-			System.out.println(boleto.mostrar());
+			Boleto boleto = getBoleto(nombre,edad,
+									genero,tipoDeVuelo,claseDeVuelo,
+									numAsiento,numVuelo,aerolinea,destino);
+			Pasajero pasajero = getPasajero(boleto);
+			//System.out.println(boleto.mostrar());
+			System.out.println(pasajero.getBoleto().mostrar());
 
 		}
 	}
-
 
 	public static Boleto getBoleto(String nombrePasajero,
 								   int edadPasajero,
@@ -112,6 +117,22 @@ public class Sistema {
 				return boleto;
 		}
 		return boleto;
+	}
+
+	public static Pasajero getPasajero(Boleto boleto){
+		Pasajero pasajero = null;
+		switch(boleto.clasePasajero) {
+			case PRIMERA_CLASE:
+				pasajero = new PasajeroPrimeraClase(boleto);
+				return pasajero;
+			case EJECUTIVO:
+				pasajero = new PasajeroEjecutivo(boleto);
+				return pasajero;
+			case TURISTA:
+				pasajero = new PasajeroTurista(boleto);
+				return pasajero;
+		}
+		return pasajero;
 	}
 
 }
